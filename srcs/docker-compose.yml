@@ -1,0 +1,73 @@
+version: '3'
+
+services:
+  mariadb:
+    container_name: ${COMPOSE_PROJECT_NAME}-mariadb-cont
+    build: ./requirements/mariadb
+    networks:
+      - backend
+    volumes:
+      - db_vol:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_WORDPRESS_DATABASE=${MYSQL_WORDPRESS_DATABASE}
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      interval: 1s
+      timeout: 30s
+      retries: 30
+    restart: always
+
+  wordpress:
+    container_name: ${COMPOSE_PROJECT_NAME}-wordpress-cont
+    build: ./requirements/wordpress/
+    networks:
+      - frontend
+      - backend
+    environment:
+      - DOMAIN_NAME=${DOMAIN_NAME}
+      - MYSQL_WORDPRESS_DATABASE=${MYSQL_WORDPRESS_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - WORDPRESS_TITLE=${WORDPRESS_TITLE}
+      - WORDPRESS_ADMIN=${WORDPRESS_ADMIN}
+      - WORDPRESS_ADMIN_PASSWORD=${WORDPRESS_ADMIN_PASSWORD}
+      - WORDPRESS_ADMIN_EMAIL=${WORDPRESS_ADMIN_EMAIL}
+    volumes:
+      - wp_vol:/var/www/html
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    restart: always
+
+  nginx:
+    container_name: ${COMPOSE_PROJECT_NAME}-nginx-cont
+    build: ./requirements/nginx/
+    networks:
+      - frontend
+    environment:
+      - DOMAIN_NAME=${DOMAIN_NAME}
+      - NGINX_HOST_PORT=${NGINX_HOST_PORT}
+    ports:
+      - '${NGINX_HOST_PORT}:443'
+    volumes:
+      - wp_vol:/var/www/html
+    depends_on:
+      - wordpress
+    restart: always
+
+networks:
+  frontend:
+    name: ${COMPOSE_PROJECT_NAME}-front.link
+  backend:
+    name: ${COMPOSE_PROJECT_NAME}-back.link
+
+volumes:
+  wp_vol:
+    name: wordpress_data
+    driver: local
+  db_vol:
+    name: database_data
+    driver: local
