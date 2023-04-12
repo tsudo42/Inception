@@ -13,5 +13,5 @@ EXPOSE 3306
 
 STOPSIGNAL SIGQUIT
 
-COPY entrypoint.sh /tmp/entrypoint.sh
+COPY tools/entrypoint.sh /tmp/entrypoint.sh
 CMD ["sh", "/tmp/entrypoint.sh"]
