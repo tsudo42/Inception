@@ -21,11 +21,13 @@ RUN wp core download --path=/var/www/html
 COPY ./conf/php-fpm.conf /etc/php8/php-fpm.conf
 COPY ./conf/php-fpm.d /etc/php8/php-fpm.d
 
+COPY tools/docker-entrypoint.sh /usr/local/bin/
+ENTRYPOINT ["docker-entrypoint.sh"]
+
 WORKDIR /var/www/html
 
 EXPOSE 9000
 
 STOPSIGNAL SIGQUIT
 
-COPY tools/entrypoint.sh /tmp/entrypoint.sh
-CMD ["sh", "/tmp/entrypoint.sh"]
+CMD ["php-fpm8", "-F", "-R"]

@@ -20,9 +20,11 @@ COPY ./conf/conf.d /etc/nginx/conf.d
 RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
     ln -sf /dev/stderr /var/log/nginx/error.log
 
+COPY tools/docker-entrypoint.sh /usr/local/bin/
+ENTRYPOINT ["docker-entrypoint.sh"]
+
 EXPOSE 443
 
 STOPSIGNAL SIGQUIT
 
-COPY tools/entrypoint.sh /tmp/entrypoint.sh
-CMD ["sh", "/tmp/entrypoint.sh"]
+CMD ["nginx", "-g", "daemon off;"]

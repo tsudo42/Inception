@@ -9,9 +9,11 @@ RUN mariadb-install-db --user=mysql --datadir=/var/lib/mysql
 
 COPY ./conf/my.cnf /etc/my.cnf.d/my.cnf
 
+COPY tools/docker-entrypoint.sh /usr/local/bin/
+ENTRYPOINT ["docker-entrypoint.sh"]
+
 EXPOSE 3306
 
 STOPSIGNAL SIGQUIT
 
-COPY tools/entrypoint.sh /tmp/entrypoint.sh
-CMD ["sh", "/tmp/entrypoint.sh"]
+CMD ["mariadbd", "--user=mysql"]
