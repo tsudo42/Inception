@@ -15,9 +15,9 @@ services:
       - MYSQL_WORDPRESS_DATABASE=${MYSQL_WORDPRESS_DATABASE}
     healthcheck:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-      interval: 1s
+      interval: 10s
       timeout: 30s
-      retries: 30
+      retries: 3
     restart: always
 
   wordpress:
