@@ -3,9 +3,18 @@ version: '3'
 services:
   redis:
     container_name: ${COMPOSE_PROJECT_NAME}-redis-cont
-    image: redis:6.2.6
+    build: ./requirements/bonus/redis
     networks:
      - backend
+    environment:
+     - REDIS_PASSWORD=${REDIS_PASSWORD}
+    volumes:
+      - redis_vol:/var/lib/redis
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 10s
+      retries: 3
     restart: always
 
   mariadb:
@@ -23,7 +32,7 @@ services:
     healthcheck:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
       interval: 10s
-      timeout: 30s
+      timeout: 10s
       retries: 3
     restart: always
 
@@ -42,10 +51,13 @@ services:
       - WORDPRESS_ADMIN=${WORDPRESS_ADMIN}
       - WORDPRESS_ADMIN_PASSWORD=${WORDPRESS_ADMIN_PASSWORD}
       - WORDPRESS_ADMIN_EMAIL=${WORDPRESS_ADMIN_EMAIL}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
     volumes:
       - wp_vol:/var/www/html
     depends_on:
       mariadb:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     restart: always
 
@@ -72,6 +84,9 @@ networks:
     name: ${COMPOSE_PROJECT_NAME}-back.link
 
 volumes:
+  redis_vol:
+    name: redis_data
+    driver: local
   wp_vol:
     name: wordpress_data
     driver: local
