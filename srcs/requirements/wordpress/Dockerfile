@@ -8,7 +8,8 @@ RUN apk update && apk upgrade && apk add --no-cache \
     php8-openssl \
     php8-fpm \
     php8-mysqli \
-    php8-iconv
+    php8-iconv \
+    php8-redis
 
 RUN adduser -S -D -H -G www-data www-data
 

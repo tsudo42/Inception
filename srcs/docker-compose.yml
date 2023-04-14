@@ -1,6 +1,13 @@
 version: '3'
 
 services:
+  redis:
+    container_name: ${COMPOSE_PROJECT_NAME}-redis-cont
+    image: redis:6.2.6
+    networks:
+     - backend
+    restart: always
+
   mariadb:
     container_name: ${COMPOSE_PROJECT_NAME}-mariadb-cont
     build: ./requirements/mariadb

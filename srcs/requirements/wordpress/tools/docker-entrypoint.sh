@@ -18,4 +18,15 @@ if [ ! -e wp-config.php ]; then
         --skip-email
 fi
 
+if ! grep -q "WP_REDIS_HOST" wp-config.php; then
+    wp config set WP_REDIS_HOST redis
+fi
+if ! grep -q "WP_REDIS_PORT" wp-config.php; then
+    wp config set WP_REDIS_PORT 6379
+fi
+
+if ! wp plugin is-installed redis-cache; then
+    wp plugin install redis-cache --activate
+fi
+
 exec "$@"
