@@ -40,17 +40,21 @@ endif
 all: build up
 
 up:
-ifeq ($(ATTACH), 1)
-	$(DOCKER_COMP) up
-else
+ifeq ($(DETACH), 1)
 	$(DOCKER_COMP) up --detach --wait
+else
+	$(DOCKER_COMP) up
 endif
 
 build:
 	$(DOCKER_COMP) build --no-cache
 
 logs:
+ifeq ($(DETACH), 1)
 	$(DOCKER_COMP) logs
+else
+	$(DOCKER_COMP) logs -f
+endif
 
 down:
 	$(DOCKER_COMP) down
