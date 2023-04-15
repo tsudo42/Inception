@@ -1,20 +1,20 @@
 version: '3'
 
 services:
-  redis:
-    container_name: ${COMPOSE_PROJECT_NAME}-redis-cont
-    build: ./requirements/bonus/redis
+  nginx:
+    container_name: ${COMPOSE_PROJECT_NAME}-nginx-cont
+    build: ./requirements/nginx/
     networks:
-     - backend
+      - frontend
     environment:
-     - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - DOMAIN_NAME=${DOMAIN_NAME}
+      - NGINX_HOST_PORT=${NGINX_HOST_PORT}
+    ports:
+      - '${NGINX_HOST_PORT}:443'
     volumes:
-      - redis_vol:/var/lib/redis
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
-      timeout: 10s
-      retries: 3
+      - wp_vol:/var/www/html
+    depends_on:
+      - wordpress
     restart: always
 
   mariadb:
@@ -61,20 +61,20 @@ services:
         condition: service_healthy
     restart: always
 
-  nginx:
-    container_name: ${COMPOSE_PROJECT_NAME}-nginx-cont
-    build: ./requirements/nginx/
+  redis:
+    container_name: ${COMPOSE_PROJECT_NAME}-redis-cont
+    build: ./requirements/bonus/redis
     networks:
-      - frontend
+     - backend
     environment:
-      - DOMAIN_NAME=${DOMAIN_NAME}
-      - NGINX_HOST_PORT=${NGINX_HOST_PORT}
-    ports:
-      - '${NGINX_HOST_PORT}:443'
+     - REDIS_PASSWORD=${REDIS_PASSWORD}
     volumes:
-      - wp_vol:/var/www/html
-    depends_on:
-      - wordpress
+      - redis_vol:/var/lib/redis
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 10s
+      retries: 3
     restart: always
 
 networks:
@@ -84,12 +84,12 @@ networks:
     name: ${COMPOSE_PROJECT_NAME}-back.link
 
 volumes:
-  redis_vol:
-    name: redis_data
-    driver: local
   wp_vol:
     name: wordpress_data
     driver: local
   db_vol:
     name: database_data
+    driver: local
+  redis_vol:
+    name: redis_data
     driver: local
