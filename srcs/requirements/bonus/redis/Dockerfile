@@ -12,6 +12,6 @@ ENTRYPOINT ["docker-entrypoint.sh"]
 
 USER redis
 
-STOPSIGNAL SIGQUIT
+STOPSIGNAL SIGTERM
 
 CMD ["redis-server", "/etc/redis/redis.conf"]
