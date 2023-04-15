@@ -12,6 +12,7 @@ services:
     ports:
       - '${NGINX_HOST_PORT}:443'
     volumes:
+      - ${CERTS_}:/etc/nginx/ssl
       - wp_vol:/var/www/html
     depends_on:
       - wordpress
