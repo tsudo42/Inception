@@ -4,6 +4,7 @@ RUN apk update && apk upgrade && apk add --no-cache \
     ghostscript \
     imagemagick \
     mariadb-client \
+    fcgi \
     \
     php8 \
     php8-fpm \
@@ -42,6 +43,7 @@ RUN wp core download --path=/var/www/html
 COPY ./conf/php-fpm.conf /etc/php8/php-fpm.conf
 COPY ./conf/php-fpm.d /etc/php8/php-fpm.d
 
+COPY --chmod=755 tools/docker-healthcheck.sh /usr/local/bin/
 COPY --chmod=755 tools/docker-entrypoint.sh /usr/local/bin/
 ENTRYPOINT ["docker-entrypoint.sh"]
 

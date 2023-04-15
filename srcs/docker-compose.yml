@@ -15,7 +15,8 @@ services:
       - ${CERTS_}:/etc/nginx/ssl
       - wp_vol:/var/www/html
     depends_on:
-      - wordpress
+      wordpress:
+        condition: service_healthy
     restart: always
 
   mariadb:
@@ -60,6 +61,12 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+    healthcheck:
+      test: ["CMD", "docker-healthcheck.sh"]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
     restart: always
 
   redis:
@@ -91,6 +98,9 @@ services:
     volumes:
       - ${CERTS_}:/etc/ssl/private
       - wp_vol:/var/www/html
+    depends_on:
+      wordpress:
+        condition: service_healthy
     restart: always
 
 networks:
