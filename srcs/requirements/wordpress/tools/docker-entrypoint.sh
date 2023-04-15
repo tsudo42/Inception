@@ -18,6 +18,11 @@ if [ ! -e wp-config.php ]; then
         --skip-email
 fi
 
+if [ ! -e adminer.php ]; then
+    wget "https://github.com/vrana/adminer/releases/download/v4.8.1/adminer-4.8.1.php"
+    ln -s "adminer-4.8.1.php" "adminer.php"
+fi
+
 chown -R www-data:www-data /var/www/html/ && \
 chown -R root:root /var/www/html/wp-config.php
 
