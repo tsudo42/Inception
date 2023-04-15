@@ -1,5 +1,11 @@
 FROM alpine:3.16.4
 
+ARG UID
+ARG GID
+
+RUN addgroup -S -g $GID www-data; \
+    adduser -S -D -h /sbin/nologin -H -G www-data -u $UID www-data
+
 RUN apk update && apk upgrade && apk add --no-cache \
     ghostscript \
     imagemagick \
@@ -29,8 +35,6 @@ RUN apk update && apk upgrade && apk add --no-cache \
     php8-zlib \
     php8-ctype \
     php8-tokenizer
-
-RUN adduser -S -D -H -G www-data www-data
 
 RUN wget 'https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar' && \
     chmod +x wp-cli.phar && \

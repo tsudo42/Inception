@@ -1,5 +1,11 @@
 FROM alpine:3.16.4
 
+ARG UID
+ARG GID
+
+RUN addgroup -S -g $GID nginx; \
+    adduser -S -D -h /sbin/nologin -H -G nginx -u $UID nginx
+
 RUN apk update && apk upgrade && apk add --no-cache \
     nginx \
     openssl

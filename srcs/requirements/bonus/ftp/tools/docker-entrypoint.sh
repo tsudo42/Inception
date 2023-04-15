@@ -2,13 +2,13 @@
 
 set -e
 
-if ! id -u ${FTP_USER} &> /dev/null 2>&1; then
-    adduser -D -h /var/www/html/ -s /sbin/nologin "${FTP_USER}"
+printf "${FTP_PASSWORD}\\n${FTP_PASSWORD}\\n" | \
+pure-pw useradd "${FTP_USER}" -f "/etc/pureftpd.pdb" \
+    -d "/var/www/html" -u www-data -g www-data -m
 
-    printf "${FTP_PASSWORD}\\n${FTP_PASSWORD}\\n" | \
-    pure-pw useradd "${FTP_USER}" -f "/etc/pureftpd.pdb" \
-        -d "/var/www/html" -u "${FTP_USER}" -g "${FTP_USER}" -m
-fi
+chown -R www-data:www-data /var/www/html
+chmod -R 775 /var/www/html
+chmod 755 /var/www/html/wp-config.php
 
 # if [ ! -e /etc/ssl/private/pure-ftpd.pem.php ]; then
 if [ true ]; then

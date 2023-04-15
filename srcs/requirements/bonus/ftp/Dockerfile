@@ -1,5 +1,11 @@
 FROM alpine:3.16.4
 
+ARG UID
+ARG GID
+
+RUN addgroup -S -g $GID www-data; \
+    adduser -S -D -h /sbin/nologin -H -G www-data -u $UID www-data
+
 RUN apk update && apk upgrade && \
     apk add --no-cache \
     pure-ftpd \

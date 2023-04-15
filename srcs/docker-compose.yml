@@ -3,7 +3,11 @@ version: '3'
 services:
   nginx:
     container_name: ${COMPOSE_PROJECT_NAME}-nginx-cont
-    build: ./requirements/nginx/
+    build:
+      context: ./requirements/nginx/
+      args:
+        UID: 1001
+        GID: 1001
     networks:
       - frontend
     environment:
@@ -40,7 +44,11 @@ services:
 
   wordpress:
     container_name: ${COMPOSE_PROJECT_NAME}-wordpress-cont
-    build: ./requirements/wordpress/
+    build:
+      context: ./requirements/wordpress/
+      args:
+        UID: 1002
+        GID: 1002
     networks:
       - frontend
       - backend
@@ -87,7 +95,11 @@ services:
 
   ftp:
     container_name: ${COMPOSE_PROJECT_NAME}-ftp-cont
-    build: ./requirements/bonus/ftp
+    build:
+      context: ./requirements/bonus/ftp/
+      args:
+        UID: 1002
+        GID: 1002
     environment:
       - DOMAIN_NAME=${DOMAIN_NAME}
       - FTP_USER=${FTP_USER}
