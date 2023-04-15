@@ -21,4 +21,4 @@ ENTRYPOINT ["docker-entrypoint.sh"]
 
 EXPOSE 20 21 30000-30009
 
-CMD ["pure-ftpd", "-l", "puredb:/etc/pureftpd.pdb", "-E", "-j", "-R", "-P", "localhost", "-p", "30000:30009", "-c", "5", "-C", "5", "-Y", "1"]
+CMD ["pure-ftpd", "-l", "puredb:/etc/pureftpd.pdb", "-E", "-j", "-P", "localhost", "-p", "30000:30009", "-c", "5", "-C", "5", "-Y", "1", "-2", "/etc/ssl/private/pure-ftpd.pem"]
