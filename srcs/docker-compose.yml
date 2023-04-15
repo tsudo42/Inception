@@ -77,6 +77,21 @@ services:
       retries: 3
     restart: always
 
+  ftp:
+    container_name: ${COMPOSE_PROJECT_NAME}-ftp-cont
+    build: ./requirements/bonus/ftp
+    environment:
+      - DOMAIN_NAME=${DOMAIN_NAME}
+      - FTP_USER=${FTP_USER}
+      - FTP_PASSWORD=${FTP_PASSWORD}
+    ports:
+      - "21:21"
+      - "30000-30009:30000-30009"
+    volumes:
+      - ${CERTS_}:/etc/ssl/private
+      - wp_vol:/var/www/html
+    restart: always
+
 networks:
   frontend:
     name: ${COMPOSE_PROJECT_NAME}-front.link

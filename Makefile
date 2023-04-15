@@ -66,9 +66,13 @@ reload: clean all
 
 fclean:
 	$(DOCKER_COMP) down --rmi all --volumes --remove-orphans
+	$(RM) -dr srcs/.certs/
 
 re: fclean all
 
-.PHONY: all up build logs down clean reload fclean re
+ftp:
+	lftp -e "set ssl:ca-file srcs/.certs/pure-ftpd.pem" tsudo.42.fr
+
+.PHONY: all up build logs down clean reload fclean re ftp
 
 # **************************************************************************** #
