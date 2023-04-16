@@ -9,7 +9,9 @@ services:
         UID: 1001
         GID: 1001
     networks:
-      - frontend
+      frontend:
+        aliases:
+          - ${DOMAIN_NAME}
     environment:
       - DOMAIN_NAME=${DOMAIN_NAME}
       - NGINX_HOST_PORT=${NGINX_HOST_PORT}
@@ -52,6 +54,7 @@ services:
     networks:
       - frontend
       - backend
+      - cache
     environment:
       - DOMAIN_NAME=${DOMAIN_NAME}
       - MYSQL_WORDPRESS_DATABASE=${MYSQL_WORDPRESS_DATABASE}
@@ -61,6 +64,9 @@ services:
       - WORDPRESS_ADMIN=${WORDPRESS_ADMIN}
       - WORDPRESS_ADMIN_PASSWORD=${WORDPRESS_ADMIN_PASSWORD}
       - WORDPRESS_ADMIN_EMAIL=${WORDPRESS_ADMIN_EMAIL}
+      - WORDPRESS_USER=${WORDPRESS_USER}
+      - WORDPRESS_USER_PASSWORD=${WORDPRESS_USER_PASSWORD}
+      - WORDPRESS_USER_EMAIL=${WORDPRESS_USER_EMAIL}
       - REDIS_PASSWORD=${REDIS_PASSWORD}
     volumes:
       - wp_vol:/var/www/html
@@ -81,7 +87,7 @@ services:
     container_name: ${COMPOSE_PROJECT_NAME}-redis-cont
     build: ./requirements/bonus/redis
     networks:
-     - backend
+     - cache
     environment:
      - REDIS_PASSWORD=${REDIS_PASSWORD}
     volumes:
@@ -120,6 +126,8 @@ networks:
     name: ${COMPOSE_PROJECT_NAME}-front.link
   backend:
     name: ${COMPOSE_PROJECT_NAME}-back.link
+  cache:
+    name: ${COMPOSE_PROJECT_NAME}-cache.link
 
 volumes:
   wp_vol:

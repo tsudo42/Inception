@@ -16,6 +16,11 @@ if [ ! -e wp-config.php ]; then
         --admin_password="${WORDPRESS_ADMIN_PASSWORD}" \
         --admin_email="${WORDPRESS_ADMIN_EMAIL}" \
         --skip-email
+
+    wp user create \
+        "${WORDPRESS_USER}" "${WORDPRESS_USER_EMAIL}" \
+        --role=author \
+        --user_pass="${WORDPRESS_USER_PASSWORD}"
 fi
 
 if [ ! -e adminer.php ]; then
