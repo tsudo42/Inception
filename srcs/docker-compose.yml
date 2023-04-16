@@ -106,6 +106,8 @@ services:
       args:
         UID: 1002
         GID: 1002
+    networks:
+      - ftplink
     environment:
       - DOMAIN_NAME=${DOMAIN_NAME}
       - FTP_USER=${FTP_USER}
@@ -128,6 +130,8 @@ networks:
     name: ${COMPOSE_PROJECT_NAME}-back.link
   cache:
     name: ${COMPOSE_PROJECT_NAME}-cache.link
+  ftplink:
+    name: ${COMPOSE_PROJECT_NAME}-ftp.link
 
 volumes:
   wp_vol:
