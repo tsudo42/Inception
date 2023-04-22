@@ -44,6 +44,7 @@ WORKDIR /var/www/html
 
 RUN wp core download --path=/var/www/html
 
+COPY ./static/ /var/www/html/static/
 COPY ./conf/php-fpm.conf /etc/php8/php-fpm.conf
 COPY ./conf/php-fpm.d /etc/php8/php-fpm.d
 

@@ -21,7 +21,13 @@ if [ ! -e wp-config.php ]; then
         "${WORDPRESS_USER}" "${WORDPRESS_USER_EMAIL}" \
         --role=author \
         --user_pass="${WORDPRESS_USER_PASSWORD}"
+
+    wp post create static/post.txt \
+        --post_title="Various Pages" \
+        --post_status=publish
 fi
+
+rm -f static/post.txt
 
 if [ ! -e adminer.php ]; then
     wget "https://github.com/vrana/adminer/releases/download/v4.8.1/adminer-4.8.1.php"
