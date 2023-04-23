@@ -129,6 +129,8 @@ services:
       context: ./requirements/bonus/irc/
     networks:
       - irclink
+    environment:
+      - IRC_PASSWORD=${IRC_PASSWORD}
     ports:
       - "6667:6667"
     restart: always

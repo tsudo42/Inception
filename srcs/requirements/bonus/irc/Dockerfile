@@ -10,6 +10,9 @@ RUN apk update && apk upgrade && \
 
 COPY conf/ /etc/ngircd/
 
+COPY --chmod=755 tools/docker-entrypoint.sh /usr/local/bin/
+ENTRYPOINT ["docker-entrypoint.sh"]
+
 EXPOSE 6667
 
 STOPSIGNAL SIGTERM
