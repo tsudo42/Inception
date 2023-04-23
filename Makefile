@@ -12,7 +12,7 @@
 
 NAME		:= inception
 
-DOCKER_COMP	:= docker-compose -p $(NAME) --project-directory srcs/
+DOCKER_COMP	:= docker compose -p $(NAME) --project-directory srcs/
 
 RM			:= rm -f
 UNAME		:= $(shell uname)
