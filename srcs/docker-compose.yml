@@ -123,6 +123,16 @@ services:
         condition: service_healthy
     restart: always
 
+  irc:
+    container_name: ${COMPOSE_PROJECT_NAME}-irc-cont
+    build:
+      context: ./requirements/bonus/irc/
+    networks:
+      - irclink
+    ports:
+      - "6667:6667"
+    restart: always
+
 networks:
   frontend:
     name: ${COMPOSE_PROJECT_NAME}-front.link
@@ -132,6 +142,8 @@ networks:
     name: ${COMPOSE_PROJECT_NAME}-cache.link
   ftplink:
     name: ${COMPOSE_PROJECT_NAME}-ftp.link
+  irclink:
+    name: ${COMPOSE_PROJECT_NAME}-irc.link
 
 volumes:
   wp_vol:
