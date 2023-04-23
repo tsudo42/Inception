@@ -39,7 +39,10 @@ endif
 
 all: build up
 
-up:
+notice:
+	@printf "$(CY)Make sure to configure $(YE)/etc/hosts$(CY)!$(RC)\n"
+
+up: notice
 ifeq ($(DETACH), 1)
 	$(DOCKER_COMP) up --detach --wait
 else
@@ -73,6 +76,6 @@ re: fclean all
 ftp:
 	lftp -e "set ssl:ca-file srcs/.certs/pure-ftpd.pem" tsudo.42.fr
 
-.PHONY: all up build logs down clean reload fclean re ftp
+.PHONY: all notice up build logs down clean reload fclean re ftp
 
 # **************************************************************************** #
